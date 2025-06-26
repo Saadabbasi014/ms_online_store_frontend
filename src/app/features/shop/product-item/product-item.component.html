@@ -1,0 +1,14 @@
+<mat-card class="col-span-4">
+     <img src="{{ product?.imgUrl}}" alt="img">
+     <mat-card-content>
+         <h2>{{product?.name}}</h2>
+         <!-- <p>{{product?.description}}</p> -->
+         <p>Price: {{product?.price | currency}}</p>
+         <mat-card-actions>
+             <button mat-stroked-button class="w-full" (click)="addToCart(product)">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    Add to Cart
+             </button>
+         </mat-card-actions>
+     </mat-card-content>
+</mat-card>
