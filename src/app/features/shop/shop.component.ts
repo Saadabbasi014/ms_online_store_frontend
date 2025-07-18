@@ -11,7 +11,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
-
+import { ShopParams } from '../../shared/models/shopParams';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import { Pagination } from '../../shared/models/pagination';
 
 @Component({
   selector: 'app-shop',
@@ -26,18 +28,17 @@ import { FormsModule } from '@angular/forms';
     MatListOption,
     MatMenuTrigger,
     MatSelectionList,
-    FormsModule
+    FormsModule,
+    MatPaginator
 ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })
 export class ShopComponent implements OnInit {
+
   private service = inject(ShopService);
   private dialogService = inject(MatDialog);
-  products: Product[] = [];
-  selectedBrands : string[] = [];
-  selectedType : string[] = [];
-  selectedSort = 'name';
+  products?: Pagination<Product>;
 
   sortOptions = [
     { value: 'Alphabetical', viewValue: 'name' },
@@ -45,16 +46,26 @@ export class ShopComponent implements OnInit {
     { value: 'Price High-Low', viewValue: 'priceDesc' },
   ]
 
+  shopParams = new ShopParams();
+
  ngOnInit(): void {
     this.initializeShop();
     
   }
 
+  
+  onPageChanged(event: PageEvent) {
+    if (this.shopParams.pageIndex !== event.pageIndex || this.shopParams.pageSize !== event.pageSize) {
+      this.shopParams.pageIndex = event.pageIndex;
+      this.shopParams.pageSize = event.pageSize;
+      this.getProducts();
+    }
+  }
+
   onSortChange(event: MatSelectionListChange) {
     const selected = event.options[0];
-    console.log('Selected sort option:', selected);
     if (selected) {
-      this.selectedSort = selected.value;
+      this.shopParams.sort = selected.value;
       this.getProducts();
     }
   }
@@ -66,10 +77,10 @@ export class ShopComponent implements OnInit {
   }
 
      getProducts(){
-     this.service.getProducts(this.selectedBrands, this.selectedType, this.selectedSort).subscribe({
+     this.service.getProducts(this.shopParams).subscribe({
         next: response => {
           // console.log('Sorted products:', response.data);
-          this.products = response.data;
+          this.products = response;
         },
         error: err => console.error('Error fetching sorted products:', err)
       });
@@ -81,16 +92,16 @@ export class ShopComponent implements OnInit {
       data: {
         brands: this.service.brands,
         types: this.service.types,
-        selectedBrands: this.selectedBrands,
-        selectedType: this.selectedType
+        selectedBrands: this.shopParams.brands,
+        selectedType: this.shopParams.types
       }
     });
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) {
           console.log('Dialog closed with result:', result);
-          this.selectedBrands = result.selectedBrands;
-          this.selectedType = result.selectedType;
+          this.shopParams.brands = result.selectedBrands;
+          this.shopParams.types = result.selectedType;
           this.getProducts();
         }
       },

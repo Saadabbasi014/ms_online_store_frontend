@@ -1,5 +1,5 @@
-<mat-card class="col-span-4">
-     <img src="{{ product?.imgUrl}}" alt="img">
+<mat-card class="col-span-4" class="product-item">
+     <img  [routerLink]="['/shop', product?.id]" src="{{ product?.imgUrl}}" alt="img">
      <mat-card-content>
          <h2>{{product?.name}}</h2>
          <!-- <p>{{product?.description}}</p> -->

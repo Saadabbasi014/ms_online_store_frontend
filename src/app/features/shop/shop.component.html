@@ -1,27 +1,45 @@
+@if (products) {
 <div class="flex flex-col gap-3 p-4">
-    <div class="flex justify-end items-center gap-3">
-        <button mat-stroked-button (click)="openFiltersDialog()">
-            <mat-icon>filter_list</mat-icon>
-            Filters
-        </button>
+    <div class="flex justify-between gap-3">
+        <div>   
+            <mat-paginator
+                 [length]="products.count"
+                 [pageSize]="shopParams.pageSize"
+                 [pageIndex]="shopParams.pageIndex - 1" 
+                 [pageSizeOptions]="[5, 10, 20, 50]"
+                 [showFirstLastButtons]="true"
+                 aria-label="Select page" 
+                 (page)="onPageChanged($event)">
+            </mat-paginator>
+        </div>
+   
+        <div class="flex gap-2">
+            <button mat-stroked-button (click)="openFiltersDialog()">
+                  <mat-icon>filter_list</mat-icon>
+                  Filters
+             </button>
 
          <button mat-stroked-button [matMenuTriggerFor]="sortMenu">
             <mat-icon>swap_vert</mat-icon>
             Sort
         </button>
+        </div>
+       
     </div>
     
     <div class="m-4 grid grid-cols-4 gap-4">
-        @for (product of products; track product.id) {
+        @for (product of products.data; track product.id) {
             <app-product-item [product]="product"></app-product-item>
         }
     </div>
 </div>
+}
+
 
 <mat-menu #sortMenu="matMenu">
-   <mat-selection-list [multiple]="false" [(ngModel)]="selectedSort" (ngModelChange)="onSortChange($event)">
+   <mat-selection-list [multiple]="false" (selectionChange)="onSortChange($event)">
        @for (sort of sortOptions; track $index) {
-        <mat-list-option [value]="sort.value" [selected]="selectedSort === sort.value">
+        <mat-list-option [value]="sort.value" [selected]="shopParams.sort === sort.value">
             {{ sort.value }}
         </mat-list-option>
        }
