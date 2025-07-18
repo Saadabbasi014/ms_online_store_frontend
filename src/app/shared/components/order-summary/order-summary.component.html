@@ -1,0 +1,64 @@
+<div class="mx-auto max-w-4xl flex-1 space-y-6 w-full s">
+  <div class="space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm p-6">
+    <h2 class="text-xl font-semibold">Order Summary</h2>
+
+    <!-- Order Details -->
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <dl class="flex items-center justify-between">
+          <dt class="font-medium text-gray-500">Subtotal</dt>
+          <dd class="font-medium text-gray-900">{{cartService.totals().subtotal}}</dd>
+        </dl>
+        <dl class="flex items-center justify-between">
+          <dt class="font-medium text-gray-500">Discount</dt>
+          <dd class="font-medium text-green-700">-{{cartService.totals().discount | currency}}</dd>
+        </dl>
+        <dl class="flex items-center justify-between">
+          <dt class="font-medium text-gray-500">Delivery Fee</dt>
+          <dd class="font-medium text-gray-900">{{cartService.totals().shipping}}</dd>
+        </dl>
+        <hr class="my-2" />
+        <dl class="flex items-center justify-between text-lg font-semibold">
+          <dt>Total</dt>
+          <dd>{{cartService.totals().total}}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Coupon Code -->
+    <div class="space-y-2">
+      <label for="coupon" class="block text-sm font-medium text-gray-700">Promo Code</label>
+      <div class="flex space-x-2">
+        <input
+          type="text"
+          id="coupon"
+          placeholder="Enter promo code"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        />
+        <button
+          type="button"
+          class="whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="space-y-2">
+      <button
+      routerLink='/checkout' 
+        type="button"
+        class="w-full rounded-md bg-green-600 px-4 py-3 text-center text-white font-semibold hover:bg-green-700 transition"
+      >
+        Proceed to Checkout
+      </button>
+      <!-- <button
+        type="button"
+        class="w-full rounded-md border border-gray-300 px-4 py-3 text-center font-medium text-gray-700 hover:bg-gray-100 transition"
+      >
+        Continue Shopping
+      </button> -->
+    </div>
+  </div>
+</div>
