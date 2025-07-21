@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Cart, CartItemType } from '../../shared/models/cart';
 import { Product } from '../../shared/models/product';
 import { nanoid } from 'nanoid';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,21 +36,21 @@ export class CartService {
 
 
 
-  // getCart(id: string) {
-  //   return this.http.get<Cart>(this.baseUrl + 'cart/' + id).pipe(
-  //     map(cart => {
-  //       this.cart.set(cart);
-  //       return cart;
-  //     })
-  //   );
-  // };
-
   getCart(id: string) {
-    return this.http.get<Cart>(this.baseUrl + 'cart/' + id).subscribe({
-      next: (cart) => this.cart.set(cart),
-      error: (error) => console.error('Error fetching cart:', error),
-    });
+    return this.http.get<Cart>(this.baseUrl + 'cart/' + id).pipe(
+      map(cart => {
+        this.cart.set(cart);
+        return cart;
+      })
+    );
   };
+
+  // getCart(id: string) {
+  //   return this.http.get<Cart>(this.baseUrl + 'cart/' + id).subscribe({
+  //     next: (cart) => this.cart.set(cart),
+  //     error: (error) => console.error('Error fetching cart:', error),
+  //   });
+  // };
 
   setCart(cart: Cart) {
     return this.http.post<Cart>(this.baseUrl + 'cart', cart).subscribe({

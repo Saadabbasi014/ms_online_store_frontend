@@ -7,27 +7,35 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { InitService } from './core/services/init.service';
 import { lastValueFrom } from 'rxjs';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
-// function initializeApp(initService: InitService) {
-//   return () => lastValueFrom(initService.init()).finally(() => {
-//     const splash = document.getElementById('initial-splash');
-//     if (splash) {
-//       splash.remove();
-//     }
-//   });
-// }
+function initializeApp(initService: InitService) {
+  return () => lastValueFrom(initService.init()).finally(() => {
+    const splash = document.getElementById('initial-splash');
+    if (splash) {
+      splash.remove();
+    }
+  });
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-     provideAnimationsAsync(),
-     provideHttpClient(withInterceptors([loadingInterceptor])),
-    //  {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initializeApp,
-    //   multi: true,
-    //   deps: [InitService]
-    //  }
+    provideAnimationsAsync(),
+    provideHttpClient(
+      withInterceptors([
+        loadingInterceptor,
+        errorInterceptor,
+        loadingInterceptor,
+        authInterceptor
+      ])),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      multi: true,
+      deps: [InitService]
+    }
   ]
 };
