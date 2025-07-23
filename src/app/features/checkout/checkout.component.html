@@ -1,2 +1,49 @@
-<p>checkout works!</p>
-<h1>only for authrize users</h1>
+<div class="flex mt-32 gap-6">
+    <div class="w-3/4">
+        <mat-stepper 
+        (selectionChange)="onStepChange($event)"
+        #stepper 
+        [linear]="true"
+        class="bg-white shadow-sm border border-gray-200">
+            <mat-step label="Address" [completed]="completionStatus().address">
+                <div id="address-element"></div>
+                <div class="flex justify-end mt-1">
+                        <mat-checkbox class="text-sm"
+                         (change)="onSaveAddressCheckboxChange($event)"
+                         [checked]="saveAddress">
+                            Save this address for future orders
+                        </mat-checkbox>
+                    </div>
+                <div class="flex justify-between mt-4">
+                    <button mat-stroked-button routerLink="/shop">Continue Shopping</button>
+                    <button mat-flat-button matStepperNext [disabled]="!completionStatus().address">Next</button>
+                </div>
+            </mat-step>
+            <mat-step label="Shipping" [completed]="completionStatus().delivery">
+                <app-checkout-delivery (deliveryComplete)="handleDeliveryChange($event)"></app-checkout-delivery>
+                   <div class="flex justify-between mt-4">
+                    <button mat-stroked-button matStepperPrevious>Back</button>
+                    <button mat-flat-button matStepperNext [disabled]="!completionStatus().delivery">Next</button>
+                </div>
+            </mat-step>
+            <mat-step label="Payment" [completed]="completionStatus().cart">
+                <div id="payment-element"></div>
+                <div class="flex justify-between mt-4">
+                    <button mat-stroked-button routerLink="/shop">Continue Shopping</button>
+                    <button mat-flat-button matStepperNext [disabled]="!completionStatus().cart">Next</button>
+                </div>
+            </mat-step>
+            <mat-step label="Confirmation">
+                <app-checkout-review></app-checkout-review>
+                 <div class="flex justify-between mt-4">
+                    <button mat-stroked-button routerLink="/shop">Continue Shopping</button>
+                    <button mat-flat-button >Pay {{cartService.totals().total | currency}}</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+        <pre>{{completionStatus() | json}}</pre>
+    </div>
+    <div class="w-1/4">
+        <app-order-summary />
+    </div>
+</div>

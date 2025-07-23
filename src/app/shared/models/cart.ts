@@ -3,7 +3,10 @@ import { nanoid } from 'nanoid';
 export type CartType = {
     id: string;
     items: CartItemType[];
-}
+    deliveryMethodId? : number;
+    paymentIntentId?: string;
+    clientSecret?: string;
+} 
 
 export type CartItemType = {
     productId: number;
@@ -16,18 +19,11 @@ export type CartItemType = {
 };
 
 export class Cart implements CartType {
-    id: string;
-    items: CartItemType[];
-
-    constructor(items: CartItemType[] = []) {
-        this.id = nanoid();
-        this.items = items;
-    }
+    id: string = nanoid();
+    items: CartItemType[] = [];
+    deliveryMethodId? : number;
+    paymentIntentId?: string;
+    clientSecret?: string; 
 }
-
-// function nanoid(): string {
-//     // Generates a simple unique id using current timestamp and random number
-//     return 'cart_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
-// }
 
 

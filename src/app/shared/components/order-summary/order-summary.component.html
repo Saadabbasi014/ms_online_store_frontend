@@ -29,36 +29,28 @@
     <div class="space-y-2">
       <label for="coupon" class="block text-sm font-medium text-gray-700">Promo Code</label>
       <div class="flex space-x-2">
-        <input
-          type="text"
-          id="coupon"
-          placeholder="Enter promo code"
-          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-        />
-        <button
-          type="button"
-          class="whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition"
-        >
+        <input type="text" id="coupon" placeholder="Enter promo code"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+        <button type="button"
+          class="whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition">
           Apply
         </button>
       </div>
     </div>
 
-    <!-- Action Buttons -->
+
+    @if (location.path() !== '/checkout') {
+          <!-- Action Buttons -->
     <div class="space-y-2">
-      <button
-      routerLink='/checkout' 
-        type="button"
-        class="w-full rounded-md bg-green-600 px-4 py-3 text-center text-white font-semibold hover:bg-green-700 transition"
-      >
+      <button routerLink='/checkout' type="button"
+        class="w-full rounded-md bg-green-600 px-4 py-3 text-center text-white font-semibold hover:bg-green-700 transition">
         Proceed to Checkout
       </button>
-      <!-- <button
-        type="button"
-        class="w-full rounded-md border border-gray-300 px-4 py-3 text-center font-medium text-gray-700 hover:bg-gray-100 transition"
-      >
+      <button type="button"
+        class="w-full rounded-md border border-gray-300 px-4 py-3 text-center font-medium text-gray-700 hover:bg-gray-100 transition">
         Continue Shopping
-      </button> -->
-    </div>
+      </button>
+    </div> 
+    }
   </div>
 </div>

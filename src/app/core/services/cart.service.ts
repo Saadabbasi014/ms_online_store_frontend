@@ -5,6 +5,7 @@ import { Cart, CartItemType } from '../../shared/models/cart';
 import { Product } from '../../shared/models/product';
 import { nanoid } from 'nanoid';
 import { map } from 'rxjs';
+import { DeliveryMethod } from '../../shared/models/deliveryMethods';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class CartService {
   baseUrl = environment.baseUrl;
   private http = inject(HttpClient);
   cart = signal<Cart | null>(null);
+  selectedDelivery = signal<DeliveryMethod | null>(null)
 
   itemCount = computed(() => {
     return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
@@ -20,9 +22,10 @@ export class CartService {
 
   totals = computed(() => {
     const cart = this.cart();
+    const delivery = this.selectedDelivery();
     if (!cart) return { subtotal: 0, shipping: 0, discount: 0, total: 0 };
     const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping for
+    const shipping = delivery? delivery.price : 0;
     const discount = subtotal > 200 ? 20 : 0; // Discount for orders over $200
     return {
       subtotal,
