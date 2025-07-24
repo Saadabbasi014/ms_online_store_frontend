@@ -2,9 +2,9 @@
     <h4 class="text-lg font-semibold">Billing and delivery information</h4>
     <dl>
         <dt class="font-medium">Shipping Address</dt>
-        <dt class="mt-1 text-gray-500">Shipping Address goes here</dt>
+        <dt class="mt-1 text-gray-500">{{confirmationToken?.shipping | address}}</dt>
         <dt class="font-medium">Shipping Details</dt>
-        <dt class="mt-1 text-gray-500">Shipping Address go here</dt>
+        <dt class="mt-1 text-gray-500">{{confirmationToken?.payment_method_preview | paymentCart}}</dt>
 
     </dl>
 </div>

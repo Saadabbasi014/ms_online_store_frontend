@@ -34,10 +34,12 @@
                 </div>
             </mat-step>
             <mat-step label="Confirmation">
-                <app-checkout-review></app-checkout-review>
+                <app-checkout-review [confirmationToken]="confirmationToken"></app-checkout-review>
                  <div class="flex justify-between mt-4">
                     <button mat-stroked-button routerLink="/shop">Continue Shopping</button>
-                    <button mat-flat-button >Pay {{cartService.totals().total | currency}}</button>
+                    <button mat-flat-button 
+                      (click)="confirmPayment(stepper)">Pay {{cartService.totals().total | currency}}
+                    </button>
                 </div>
             </mat-step>
         </mat-stepper>
