@@ -38,7 +38,14 @@
                  <div class="flex justify-between mt-4">
                     <button mat-stroked-button routerLink="/shop">Continue Shopping</button>
                     <button mat-flat-button 
-                      (click)="confirmPayment(stepper)">Pay {{cartService.totals().total | currency}}
+                      (click)="confirmPayment(stepper)"
+                      [disabled]="!confirmationToken || loading"
+                    >
+                     @if (loading) {
+                       <mat-spinner diameter="20"></mat-spinner>
+                     }@else {
+                        Pay {{cartService.totals().total | currency}}
+                     }
                     </button>
                 </div>
             </mat-step>

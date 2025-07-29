@@ -48,7 +48,7 @@ export class ShopService {
   }
 
   getBrands() {
-    this.http.get<string[]>(this.baseUrl + 'productV2/brands')
+    this.http.get<string[]>(this.baseUrl + 'product/brands')
       .subscribe((response: string[]) => {
         this.brands = response;
         // console.log('Brands fetched:', response);
@@ -56,7 +56,7 @@ export class ShopService {
   }
 
   getTypes() {
-    this.http.get<string[]>(this.baseUrl + 'productV2/types')
+    this.http.get<string[]>(this.baseUrl + 'product/types')
       .subscribe((response: string[]) => this.types = response);
   }
 }
