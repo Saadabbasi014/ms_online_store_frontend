@@ -17,6 +17,8 @@ import { CheckoutReviewComponent } from "./checkout-review/checkout-review.compo
 import { CartService } from '../../core/services/cart.service';
 import { CurrencyPipe, JsonPipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OrderToCreate, ShippingAddress } from '../../shared/models/order';
+import { OrderService } from '../../core/services/order.service';
 
 @Component({
   selector: 'app-checkout',
@@ -42,6 +44,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   private stripeService = inject(StripeService);
   private accountService = inject(AccountService);
+  private orderService = inject(OrderService);
   cartService = inject(CartService)
   private router = inject(Router);
   addressElement?: StripeAddressElement;
@@ -84,22 +87,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     })
   }
 
-  handleDeliveryChange(event: boolean){
-    this.completionStatus.update(state =>{
+  handleDeliveryChange(event: boolean) {
+    this.completionStatus.update(state => {
       state.delivery = event;
       return state;
     })
   }
 
-  async getConfirmationToken(){
-    try{
-      if(Object.values(this.completionStatus()).every(status => status === true)){
+  async getConfirmationToken() {
+    try {
+      if (Object.values(this.completionStatus()).every(status => status === true)) {
         const result = await this.stripeService.creteConfirmationToken();
-        if(result.error) throw new Error(result.error.message);
+        if (result.error) throw new Error(result.error.message);
         this.confirmationToken = result.confirmationToken;
         console.log("this.confirmationToken", this.confirmationToken);
       }
-    }catch(error: any){
+    } catch (error: any) {
       this.snackBar.error(error.message);
     }
   }
@@ -107,7 +110,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   async onStepChange($event: StepperSelectionEvent) {
     if ($event.selectedIndex === 1) {
       if (this.saveAddress) {
-        const address = await this.getAddressFromStripeAddress();
+        const address = await this.getAddressFromStripeAddress() as Address;
         address && firstValueFrom(this.accountService.updateAddress(address));
       }
     }
@@ -116,40 +119,72 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       await firstValueFrom(this.stripeService.creteOrUpdateStripeIntent())
     }
 
-    if($event.selectedIndex === 3){
+    if ($event.selectedIndex === 3) {
       await this.getConfirmationToken();
     }
   }
 
-  async confirmPayment(stepper: MatStepper){
+  async confirmPayment(stepper: MatStepper) {
     this.loading = true;
-    try{
-      if(this.confirmationToken){
+    try {
+      if (this.confirmationToken) {
         const result = await this.stripeService.confirmPayment(this.confirmationToken);
-        if(result.error) {
-          throw new Error(result.error.message)
-        }else{
-          const result = this.cartService.deletecart(this.confirmationToken.id); // i think it will not execute sussessfully. 
-          console.log("deletecart", result);
-          this.cartService.selectedDelivery.set(null);
-          this.router.navigateByUrl("/checkout/success");
 
+        if (result.paymentIntent?.status === 'succeeded') {
+          const order = await this.CreteOrderModel();
+          const orderResult = await firstValueFrom(this.orderService.createOrder(order));
+
+          if (orderResult) {
+            this.cartService.deletecart(this.confirmationToken.id);  
+            this.cartService.selectedDelivery.set(null);
+            this.router.navigateByUrl("/checkout/success");
+          }else{
+            throw new Error('Order creation failed.')
+          }
+        }else if (result.error) {
+          throw new Error(result.error.message)
+        } else {
+          throw new Error('Some thing went wrong.')
         }
       }
-    }catch(error: any){
+    } catch (error: any) {
       this.snackBar.error(error.message || "Something went wrong");
       stepper.previous();
-    }finally{
+    } finally {
       this.loading = false;
     }
   }
 
-  private async getAddressFromStripeAddress(): Promise<Address | null> {
+  private async CreteOrderModel(): Promise<OrderToCreate> {
+    const cart = this.cartService.cart();
+    const shippingAddress = await this.getAddressFromStripeAddress() as ShippingAddress
+    const card = this.confirmationToken?.payment_method_preview.card;
+
+    if (!cart?.id || !cart.deliveryMethodId || !card || !shippingAddress) {
+      throw new Error("Problem creating order.")
+    }
+
+    console.log("cart==>", cart)
+    return {
+      cartId: cart.id,
+      paymentSummary: {
+        last4: +card.last4,
+        brand: card.brand,
+        expMonth: card.exp_month,
+        expYear: card.exp_year
+      },
+      deliveryMethodId: cart.deliveryMethodId,
+      shippingAddress: shippingAddress
+    }
+  }
+
+  private async getAddressFromStripeAddress(): Promise<Address | ShippingAddress | null> {
     const result = await this.addressElement?.getValue();
     const address = result?.value?.address;
 
     if (address) {
       return {
+        name: result.value.name,
         line1: address.line1,
         line2: address.line2!,
         city: address.city,

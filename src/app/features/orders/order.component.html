@@ -1,0 +1,37 @@
+<div class="max-w-6xl mx-auto mt-32 px-4">
+  <h2 class="font-semibold text-3xl mb-8 text-center text-gray-800">My Orders</h2>
+
+  <div class="overflow-x-auto shadow-md rounded-lg">
+    <table class="min-w-full table-auto divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr class="uppercase text-gray-600 text-sm tracking-wider">
+          <th class="text-center px-6 py-4">Order</th>
+          <th class="text-left px-6 py-4">Date</th>
+          <th class="text-left px-6 py-4">Total</th>
+          <th class="text-left px-6 py-4">Status</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        @for (order of orders; track $index) {
+          <tr
+            routerLink="orders/{{order.id}}"
+            class="hover:bg-gray-50 transition duration-200 ease-in-out"
+          >
+            <td class="text-center px-6 py-4 font-medium text-gray-700">#{{order.id}}</td>
+            <td class="px-6 py-4 text-gray-600">{{order.orderDate | date: 'medium'}}</td>
+            <td class="px-6 py-4 text-green-600 font-semibold">{{order.total | currency}}</td>
+            <td class="px-6 py-4">
+              <span class="inline-block px-3 py-1 text-sm rounded-full font-medium 
+                {{ order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 
+                   order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
+                   order.status === 'Cancelled' ? 'bg-red-100 text-red-800' : 
+                   'bg-gray-100 text-gray-800' }}">
+                {{order.status}}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
