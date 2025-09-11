@@ -13,7 +13,7 @@ export type CartItemType = {
     productName: string;
     price : number;
     quantity: number;
-    imageUrl: string;
+    imgUrl: string;
     brand: string;
     type: string;
 };

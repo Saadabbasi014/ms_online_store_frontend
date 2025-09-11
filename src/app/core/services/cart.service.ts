@@ -145,7 +145,7 @@ export class CartService {
       productName: item.name,
       price: item.price,
       quantity: 1,
-      imageUrl: item.imgUrl,
+      imgUrl: item.imgUrl,
       brand: item.brand,
       type: item.type
     };

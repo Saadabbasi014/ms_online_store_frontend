@@ -4,7 +4,7 @@
     <!-- Product Image -->
     <div class="sm:col-span-1">
       <a [routerLink]="'/shop/' + item().productId">
-        <img [src]="item().imageUrl" alt="product image" class="h-24 w-24 object-cover rounded-md">
+        <img [src]="item().imgUrl" alt="{{item().imgUrl}}" class="h-24 w-24 object-cover rounded-md">
       </a>
     </div>
 
@@ -13,7 +13,7 @@
       <a [routerLink]="'/shop/' + item().productId" class="font-semibold text-lg text-gray-800 block">
         {{ item().productName }}
       </a>
-      <button mat-button color="warn" class="text-red-600 hover:underline flex items-center gap-1">
+      <button mat-button (click)="removeItemFromCart()" color="warn" class="text-red-600 hover:underline flex items-center gap-1">
         <mat-icon>delete</mat-icon>
         Delete
       </button>
@@ -28,13 +28,13 @@
           <mat-icon class="text-red-600">remove</mat-icon>
         </button>
         <span class="font-semibold text-lg">{{ item().quantity }}</span>
-        <button mat-icon-button (click)="decreaseQuantity()">
+        <button mat-icon-button (click)="increaseQuantity()">
           <mat-icon class="text-green-600">add</mat-icon>
         </button>
       </div>
 
       <!-- Total Price -->
-      <p class="font-bold text-lg text-gray-900">
+      <p class="font-bold text-lg text-purple-500">
         ${{ item().price * item().quantity | number: '1.2-2' }}
       </p>
     </div>

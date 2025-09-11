@@ -1,4 +1,4 @@
-<mat-card class="p-0 overflow-hidden max-w-6xl mx-auto border border-gray-200 rounded-none bg-white">
+<mat-card class="p-0 overflow-hidden max-w-6xl mx-auto border border-gray-200 rounded-none bg-white m-4 my-8">
   <!-- Header Section -->
   <div class="bg-gray-100 border-b border-gray-200 px-6 py-4">
     <div class="flex justify-between items-center">
@@ -10,7 +10,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="p-6c bg-white">
+  <div class="p-6c bg-white p-4">
     <!-- Two Column Layout -->
     <div class="flex flex-col lg:flex-row gap-6">
       <!-- Left Column - Order Details -->
@@ -26,7 +26,8 @@
             </h2>
           </div>
           <div class="p-4">
-            <p class="text-sm text-gray-600 mb-2">Expected delivery: <span class="font-medium">{{order?.orderDate | date : 'medium'}}</span></p>
+            <p class="text-sm text-gray-600 mb-2">Expected delivery: <span class="font-medium">{{order?.orderDate | date
+                : 'medium'}}</span></p>
             <div class="w-full bg-gray-200 rounded-full h-2.5">
               <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%"></div>
             </div>
@@ -34,7 +35,7 @@
         </div>
 
         <!-- Order Items -->
-        <div class="border border-gray-200 rounded">
+        <div class="border border-gray-200 rounded h-80 overflow-y-scroll">
           <div class="border-b border-gray-200 px-4 py-3 bg-gray-50">
             <h2 class="text-sm font-medium text-gray-900">Order Items</h2>
           </div>
@@ -64,18 +65,36 @@
         <!-- Shipping Address -->
         <div class="border border-gray-200 rounded mb-6">
           <div class="border-b border-gray-200 px-4 py-3 bg-gray-50">
-            <h2 class="text-sm font-medium text-gray-900">Shipping Address</h2>
+            <h2 class="text-sm font-medium text-gray-900">Payment & Shipping</h2>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center">
+              <!-- <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+              </div> -->
+              <div>
+                <p class="text-sm font-medium text-gray-900 capitalize">{{order?.paymentSummary?.brand}}</p>
+                <p class="text-sm font-medium text-gray-900 capitalize">**** {{order?.paymentSummary?.last4}}</p>
+
+                <p class="text-xs text-gray-500 mt-1">Expires
+                  {{order?.paymentSummary?.expMonth}}/{{order?.paymentSummary?.expYear}}</p>
+              </div>
+            </div>
           </div>
           <div class="p-4">
             <p class="text-sm text-gray-900">{{order?.shippingAddress?.name}}</p>
             <p class="text-sm text-gray-600 mt-1">{{order?.shippingAddress?.line1}}</p>
-            <p class="text-sm text-gray-600">{{order?.shippingAddress?.city}}, {{order?.shippingAddress?.state}} {{order?.shippingAddress?.postalCode}}</p>
+            <p class="text-sm text-gray-600">{{order?.shippingAddress?.city}}, {{order?.shippingAddress?.state}}
+              {{order?.shippingAddress?.postalCode}}</p>
             <p class="text-sm text-gray-600">{{order?.shippingAddress?.country}}</p>
           </div>
         </div>
 
         <!-- Payment Method -->
-        <div class="border border-gray-200 rounded mb-6">
+        <!-- <div class="border border-gray-200 rounded mb-6">
           <div class="border-b border-gray-200 px-4 py-3 bg-gray-50">
             <h2 class="text-sm font-medium text-gray-900">Payment Method</h2>
           </div>
@@ -92,7 +111,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Order Summary -->
         <div class="border border-gray-200 rounded">
@@ -122,7 +141,7 @@
     </div>
 
     <!-- Order Actions -->
-    <div class="mt-6 flex flex-wrap gap-3">
+    <div class="mt-2 flex flex-wrap gap-3">
       <button mat-stroked-button class="border-gray-300 text-sm">Track package</button>
       <button mat-stroked-button class="border-gray-300 text-sm">View invoice</button>
       <button mat-stroked-button class="border-gray-300 text-sm">Print receipt</button>

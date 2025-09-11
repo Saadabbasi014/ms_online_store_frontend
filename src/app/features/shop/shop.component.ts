@@ -12,7 +12,7 @@ import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angula
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { ShopParams } from '../../shared/models/shopParams';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../shared/models/pagination';
 
 @Component({
@@ -30,7 +30,7 @@ import { Pagination } from '../../shared/models/pagination';
     MatSelectionList,
     FormsModule,
     MatPaginator
-],
+  ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })
@@ -48,12 +48,12 @@ export class ShopComponent implements OnInit {
 
   shopParams = new ShopParams();
 
- ngOnInit(): void {
+  ngOnInit(): void {
     this.initializeShop();
-    
+
   }
 
-  
+
   onPageChanged(event: PageEvent) {
     if (this.shopParams.pageIndex !== event.pageIndex || this.shopParams.pageSize !== event.pageSize) {
       this.shopParams.pageIndex = event.pageIndex;
@@ -76,15 +76,15 @@ export class ShopComponent implements OnInit {
     this.getProducts();
   }
 
-     getProducts(){
-     this.service.getProducts(this.shopParams).subscribe({
-        next: response => {
-          // console.log('Sorted products:', response.data);
-          this.products = response;
-        },
-        error: err => console.error('Error fetching sorted products:', err)
-      });
-   }
+  getProducts() {
+    this.service.getProducts(this.shopParams).subscribe({
+      next: response => {
+        // console.log('Sorted products:', response.data);
+        this.products = response;
+      },
+      error: err => console.error('Error fetching sorted products:', err)
+    });
+  }
 
   openFiltersDialog(): void {
     const dialogRef = this.dialogService.open(FiltersDialogComponent, {
@@ -105,7 +105,7 @@ export class ShopComponent implements OnInit {
           this.getProducts();
         }
       },
-      error: (err) => console.error('Dialog closed with error:', err) 
+      error: (err) => console.error('Dialog closed with error:', err)
     })
   }
 
