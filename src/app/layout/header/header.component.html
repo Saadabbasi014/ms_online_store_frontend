@@ -11,25 +11,46 @@
     </nav>
 
     <div class="flex gap-3 align-middle">
+      <!-- Cart -->
       <a routerLink="/cart" matBadge="{{cartService.itemCount()}}" matBadgeSize="large" class="custom-badge mt-2 mr-2">
         <mat-icon>shopping_cart</mat-icon>
       </a>
+
+      <!-- Notifications -->
+      <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" matBadge="{{unreadCount}}" matBadgeColor="warn">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <mat-menu #notificationsMenu="matMenu" (menuOpened)="clearNotifications()">
+        <ng-container *ngIf="notifications.length > 0; else noNotifications">
+          <button mat-menu-item *ngFor="let note of notifications">
+            <mat-icon>notifications</mat-icon>
+            <span>{{ note }}</span>
+          </button>
+        </ng-container>
+        <ng-template #noNotifications>
+          <button mat-menu-item disabled>No notifications</button>
+        </ng-template>
+      </mat-menu>
+
+      <!-- Account section -->
       @if (accountService.currentUser()) {
       <button mat-stroked-button class="text-gray-600 hover:text-gray-800" [mat-menu-trigger-for]="menu">
         <mat-icon>arrow_drop_down</mat-icon>
         <span>{{accountService.currentUser()?.email}}</span>
       </button>
-      }@else {
+      } @else {
       <button mat-stroked-button class="text-gray-600 hover:text-gray-800" routerLink="account/login">
         <mat-icon>login</mat-icon>
         Login
       </button>
       <button mat-stroked-button class="text-gray-600 hover:text-gray-800" routerLink="account/register">
         <mat-icon>register</mat-icon>
-        Reginster
+        Register
       </button>
       }
     </div>
+
   </div>
 </header>
 @if (busyService.loading) {
